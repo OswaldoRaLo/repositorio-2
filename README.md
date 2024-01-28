@@ -56,7 +56,7 @@ Si aparece un error "Public key Retriveal is not allowed"
 
 En dbeaver desde los drivers puedes modificar el campo "allow Public key Retriveal" a TRUE y el error se soluciona
 
-
+Si eso no funciona ejecuta el Dockerfile adjunto
 
 
 
