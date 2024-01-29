@@ -1,13 +1,11 @@
-FROM mysql:latest
+FROM python:alpine
 
-RUN echo "[mysqld]" >> /etc/mysql/my.cnf \
-    && echo "skip-secure-auth" >> /etc/mysql/my.cnf
+COPY conexion.py /app/conexion.py
 
-ENV MYSQL_ROOT_PASSWORD=tu_password\
-    MYSQL_DATABASE=tu_database \
-    MYSQL_USER=tu_usuario \
-    MYSQL_PASSWORD=tu_password
+RUN pip install mysql-connector-python
 
-EXPOSE 33060
+WORKDIR /app
 
-CMD ["mysqld"]
+CMD ["python", "conexion.py"]
+
+
