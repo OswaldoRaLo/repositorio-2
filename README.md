@@ -11,16 +11,33 @@ En este repositorio se ha creado un archivo Dockerfile, que permite crear una im
 
 ## Instrucciones.
 
-### 1. Instalar la imagen de MYSQL
+### 1. Crear una red de docker
+
+Se eejecuta el comando en consola
+```bash
+docker network create red_docker
+```
+
+### 2. Instalar la imagen de MYSQL y crear el contenedor1
 
 Ejecutamos este comando en consola, que tomara la ultima imagen de mysql
 ```bash
- docker run -d -p 33060:3306 --name mysql-db -e MYSQL_ROOT_PASSWORD=1234 mysql
+ docker run -d -p 33060:3306 --name mysql-db --network red_docker -e MYSQL_ROOT_PASSWORD=1234 mysql
  ```
 
 3306 hace referencia al puerto de docker y 1234 es la contraseña
 
-### 2. Conectarse a docker desde la terminal
+### 3. creamos otro contenedor que se comunique con el contendor de mysql
+
+Creamos otro contenedor con el comando: 
+
+```bash
+docker run -it --name otro-contenedor --network red_docker python:alpine
+ ```
+
+Dicho contenedor no contiene la imagen de mysql
+
+### 4. Conectarse al contenedor de mysql desde la terminal
 
 Ejecutamos este comando en consola
 
@@ -30,7 +47,7 @@ docker exec -it mysql-db mysql -p
 
 Solicitara la contraseña antes especificada
 
-### 3. Conectarse a docker desde la terminal
+### 5. Conectarse a mysql con docker desde la terminal
 
 Creamos una base de datos en mysql con el comando
 
@@ -38,7 +55,7 @@ Creamos una base de datos en mysql con el comando
 create database mysql_docker;
 use mysql_docker;
  ```
-### 4. Crear una tabla desde la terminal
+### 6. Crear una tabla desde la terminal
 
 ```bash
  create table nombre_tabla(
@@ -47,16 +64,11 @@ use mysql_docker;
     -> fecha timestamp default current_timestamp on update current_timestamp);
  ```
 
-### 5. Verificar 
+### 7. LLena de datos tu bd
 
-Verificamos la conexion, en mi caso lo hice con dbeaver
-Ingresamos con la informacion del comando del paso 1.
+### 8. Ejecuta este comando
 
-Si aparece un error "Public key Retriveal is not allowed" 
-
-En dbeaver desde los drivers puedes modificar el campo "allow Public key Retriveal" a TRUE y el error se soluciona
-
-Si eso no funciona ejecuta el Dockerfile adjunto
-
-
-
+```bash
+docker build -t consulta_mysql .
+docker run --network red_docker consulta_mysql
+ ```
